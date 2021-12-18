@@ -40,6 +40,34 @@ public class AuthorDAO {
 		return "Fail";
 	}
 	
+	public Author find(Author author) {
+		String sql = "SELECT * FROM author WHERE email=? AND password=?";		
+		
+		try {			
+			Author findAuthor = new Author();
+			
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, author.getEmail());
+			stmt.setString(2, author.getPassword());			
+			
+			ResultSet rs = stmt.executeQuery();
+			
+			while( rs.next() ) {
+				findAuthor.setId(rs.getInt("id"));
+				findAuthor.setName(rs.getString("name"));
+				findAuthor.setEmail(rs.getString("Email"));
+			}
+			rs.close();
+			stmt.close();
+			
+			return findAuthor;
+			     	  
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public String update(Author author) {
 		String sql = "UPDATE author SET name=?, email=?, password=password WHERE id=?";
 		
@@ -106,5 +134,13 @@ public class AuthorDAO {
 			e.printStackTrace();
 			return null;
 		}		
+	}
+	
+	public void close() {
+		try {
+			this.conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
