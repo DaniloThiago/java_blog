@@ -17,6 +17,8 @@ Elaboraremos um sistema simples de um Blog (controle de usuário e postagens)
 - [x] Definição do projeto
 - [x] Criação do BD
 - [x] Login/Logout
+- [ ] Form para cadastro de author
+- [ ] Form para cadastro de post
 - [ ] TODO
 
 ## Contribuição
