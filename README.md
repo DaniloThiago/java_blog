@@ -16,6 +16,7 @@ Elaboraremos um sistema simples de um Blog (controle de usuário e postagens)
 ## Features
 - [x] Definição do projeto
 - [x] Criação do BD
+- [x] Login/Logout
 - [ ] TODO
 
 ## Contribuição

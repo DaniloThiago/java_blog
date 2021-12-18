@@ -40,19 +40,20 @@ public class AuthorDAO {
 		return "Fail";
 	}
 	
-	public Author find(Author author) {
+	public Author find(Author author) {		
+		
 		String sql = "SELECT * FROM author WHERE email=? AND password=?";		
 		
-		try {			
-			Author findAuthor = new Author();
+		try {
 			
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1, author.getEmail());
 			stmt.setString(2, author.getPassword());			
 			
 			ResultSet rs = stmt.executeQuery();
-			
-			while( rs.next() ) {
+			Author findAuthor = null;
+			if( rs.next() != false) {
+				findAuthor = new Author();
 				findAuthor.setId(rs.getInt("id"));
 				findAuthor.setName(rs.getString("name"));
 				findAuthor.setEmail(rs.getString("Email"));

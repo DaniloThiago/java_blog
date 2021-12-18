@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,11 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import com.blog.bd.ConnectionFactory;
 import com.blog.dao.AuthorDAO;
 import com.blog.model.Author;
+import com.mysql.cj.Session;
 
 /**
  * Servlet implementation class BlogController
  */
-@WebServlet(urlPatterns = {"/login", "/validar"})
+@WebServlet(urlPatterns = {"/login", "/validar", "/logout"})
 public class BlogController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -35,13 +37,36 @@ public class BlogController extends HttpServlet {
 		String action = request.getServletPath();				
 		
 		if( action.equals("/login") ) {			
-			response.sendRedirect("login.html");
+			response.sendRedirect("login.jsp");
 			
-		} else if( action.equals("/validar")) {
+		}
+		
+		else if( action.equals("/validar")) {
 			validar(request, response);
 		}
-//		ConnectionFactory cf = new ConnectionFactory();
-//		cf.testConnection();
+	
+		else if( action.equals("/logout")) {
+			Cookie cookie = null;
+			Cookie[] cookies = null;
+			cookies = request.getCookies();
+			if (cookies != null) {
+				for (int i = 0; i < cookies.length; i++) {
+					cookie = cookies[i];					
+					cookie.setMaxAge(0);
+					response.addCookie(cookie);
+				}
+			}
+			response.sendRedirect("/Blog");
+		}
+		
+	}
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String action = request.getServletPath();				
+				
+		if( action.equals("/validar")) {
+			validar(request, response);
+		}
 		
 	}
 
@@ -50,17 +75,36 @@ public class BlogController extends HttpServlet {
 	 */
 	protected void validar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Author author = new Author();
-		author.setEmail(request.getParameter("email"));
-		author.setPassword(request.getParameter("password"));
 		
-		AuthorDAO authorDAO = new AuthorDAO();
-		Author findAuthor = authorDAO.find(author);
-		authorDAO.close();
+		String mail = request.getParameter("email");
+		String pass = request.getParameter("password");
 		
-		request.setAttribute("author", findAuthor);
+		if ( mail != null && pass != null && !mail.isEmpty() && !pass.isEmpty() ) {
+			author.setEmail(mail);
+			author.setPassword(pass);
+			
+			AuthorDAO authorDAO = new AuthorDAO();
+			Author findAuthor = authorDAO.find(author);
+			authorDAO.close();
+			
+			if(findAuthor != null) {
+				Cookie cookieName = new Cookie("name",findAuthor.getName());
+				Cookie cookieEmail = new Cookie("email",findAuthor.getEmail());
+				cookieName.setMaxAge(60*2);
+				cookieEmail.setMaxAge(60*2);
+				response.addCookie(cookieName);
+				response.addCookie(cookieEmail);
+				response.sendRedirect("/Blog");
+			} else {
+				request.setAttribute("error", "Email/Password errado");
+				request.getRequestDispatcher("/login.jsp").forward(request, response);	
+			}
+				
+		} else {
+			request.setAttribute("error", "Email ou Password em branco");
+			request.getRequestDispatcher("/login.jsp").forward(request, response);	
+		}
 		
-		RequestDispatcher rd = request.getRequestDispatcher("/index.jsp");
-		rd.forward(request, response);
 	}
 
 }

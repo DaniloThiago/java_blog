@@ -2,13 +2,24 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Blog Java</title>
+<title>Blog Java - Login</title>
 <link rel="stylesheet" type="text/css" href="assets/bootstrap-5.1.3/css/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+
+	<%
+		if ( request.getAttribute("error") != null ) {
+	%>
+		<script type="text/javascript">
+			alert("<%= request.getAttribute("error") %>");
+		</script>
+	<%
+		}
+	%>
+
 </head>
 <body>
 
-	<nav class="navbar navbar-light bg-light">
+	<nav class="navbar navbar-dark bg-dark">
 	  <div class="container-fluid">
 	    <a class="navbar-brand">Blog Java</a>
 	    <div class="d-flex">	    	
@@ -21,7 +32,7 @@
 	  <div class="row justify-content-md-center">
 	    <div class="col col-lg-4 py-4">
 	      
-				<form name="formLogin" action="validar">
+				<form name="formLogin" action="validar" method="post">
 				  <div class="mb-3">
 					  <label for="formControlEmail" class="form-label">Email:</label>
 					  <input type="email" name="email" class="form-control" id="formControlEmail">
