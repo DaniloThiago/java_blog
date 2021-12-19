@@ -36,6 +36,7 @@
 	       	<span class="navbar-text me-4">
 			      Olá <%= name %>
 			    </span>
+	      	<a href="newpost"><button class="btn btn-outline-success me-3">Criar Post</button></a>
 	      	<a href="logout"><button class="btn btn-outline-danger">Logout</button></a>
 	      <% }  %>
 	    </div>
