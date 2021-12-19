@@ -44,10 +44,11 @@
 					</div>
 
 				  <div class="d-grid gap-2 col-4 mx-auto pt-4">
-					  <button class="btn btn-primary" type="submit">Login</button>					  
+					  <button class="btn btn-primary" type="submit">Login</button>
 					</div>
 				</form>
 	    </div>
+		</div>
 	</div>
 	
 </body>
