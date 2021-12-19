@@ -14,8 +14,9 @@
    		}
   	}
  	}
- 	if (name.isEmpty() ) {
- 		response.sendRedirect("login.jsp");
+ 	if ( name.isEmpty() ) {
+ 		response.sendRedirect("login");
+ 		return;
  	}
  %>
 <!DOCTYPE html>
@@ -26,9 +27,15 @@
 <link rel="stylesheet" type="text/css" href="assets/bootstrap-5.1.3/css/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
 
-<% if(name.isEmpty()) { %>
-	
-<% }  %>
+	<%
+		if ( request.getAttribute("error") != null ) {
+	%>
+		<script type="text/javascript">
+			alert("<%= request.getAttribute("error") %>");
+		</script>
+	<%
+		}
+	%>
 
 </head>
 <body>
@@ -49,21 +56,26 @@
 				<form name="formLogin" action="createpost" method="post">
 				
 				  <div class="mb-3">
-					  <label for="titulo" class="form-label">Title</label>
+					  <label for="titulo" class="form-label">Título</label>
 					  <input type="text" class="form-control" id="titulo" name="titulo">
 					</div>
+					
+					<div class="mb-3">
+					  <label for="subtitulo" class="form-label">Subtítulo</label>
+					  <input type="text" class="form-control" id="subtitulo" name="subtitulo" placeholder="Opcional">
+					</div>
 				
-				<div class="mb-3">
-					<label for="categoria" class="form-label">Categoria</label>
-					<select id="categoria" name="categoria" class="form-select">
-						<%
-							ArrayList<Category> categories = (ArrayList<Category>) request.getAttribute("categorias");
-							for (Category category : categories) {
-						%>
-					  	<option value="<%=category.getId() %>"><%= category.getDescription() %></option>
-					  <% } %>
-					</select>
-				</div>
+					<div class="mb-3">
+						<label for="categoria" class="form-label">Categoria</label>
+						<select id="categoria" name="categoria" class="form-select">
+							<%
+								ArrayList<Category> categories = (ArrayList<Category>) request.getAttribute("categorias");
+								for (Category category : categories) {
+							%>
+						  	<option value="<%=category.getId() %>"><%= category.getDescription() %></option>
+						  <% } %>
+						</select>
+					</div>
 					
 					<div class="mb-3">
 					  <label for="texto" class="form-label">Post</label>

@@ -56,7 +56,35 @@ public class AuthorDAO {
 				findAuthor = new Author();
 				findAuthor.setId(rs.getInt("id"));
 				findAuthor.setName(rs.getString("name"));
-				findAuthor.setEmail(rs.getString("Email"));
+				findAuthor.setEmail(rs.getString("email"));
+			}
+			rs.close();
+			stmt.close();
+			
+			return findAuthor;
+			     	  
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public Author findId(int id) {		
+		
+		String sql = "SELECT * FROM author WHERE id=?";		
+		
+		try {
+			
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, id);
+			
+			ResultSet rs = stmt.executeQuery();
+			Author findAuthor = null;
+			if( rs.next() != false) {
+				findAuthor = new Author();
+				findAuthor.setId(rs.getInt("id"));
+				findAuthor.setName(rs.getString("name"));
+				findAuthor.setEmail(rs.getString("email"));
 			}
 			rs.close();
 			stmt.close();

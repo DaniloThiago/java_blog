@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import com.blog.bd.ConnectionFactory;
+import com.blog.model.Author;
 import com.blog.model.Category;
 
 public class CategoryDAO {
@@ -39,6 +40,32 @@ public class CategoryDAO {
 			e.printStackTrace();
 			return null;
 		}		
+	}
+	
+	public Category findId(int id) {
+		String sql = "SELECT * FROM category WHERE id=?";		
+		
+		try {
+			
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, id);
+			
+			ResultSet rs = stmt.executeQuery();
+			Category findCategory = null;
+			if( rs.next() != false) {
+				findCategory = new Category();
+				findCategory.setId(rs.getInt("id"));
+				findCategory.setDescription(rs.getString("description"));
+			}
+			rs.close();
+			stmt.close();
+			
+			return findCategory;
+			     	  
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public void close() {
