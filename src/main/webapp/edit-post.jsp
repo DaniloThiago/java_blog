@@ -83,7 +83,7 @@
 					</div>
 					
 				  <div class="d-grid gap-2 col-4 mx-auto pt-4">
-					  <button class="btn btn-primary" type="submit">Criar</button>
+					  <button class="btn btn-primary" type="submit">Atualizar</button>
 					</div>
 				</form>
 	    </div>
