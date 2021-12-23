@@ -178,12 +178,12 @@ public class BlogController extends HttpServlet {
 			if(result.equals("Success")) {
 				response.sendRedirect("/Blog");
 			} else {
-				request.setAttribute("error", "Algoi de errado n„o est· correto =( !");
+				request.setAttribute("error", "Algo de errado n√£o est√° correto =( !");
 				request.getRequestDispatcher("/newpost.jsp").forward(request, response);
 			}
 				
 		} else {
-			request.setAttribute("error", "Campo(s) obrigatÛrio(s) em branco.");
+			request.setAttribute("error", "Campo(s) obrigat√≥rio(s) em branco.");
 			request.getRequestDispatcher("/login.jsp").forward(request, response);
 		}
 		
