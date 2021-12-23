@@ -93,6 +93,10 @@ public class BlogController extends HttpServlet {
 			createPost(request, response);
 		}
 		
+		if( action.equals("/editpost")) {
+			createPost(request, response);
+		}
+		
 	}
 
 	/**
@@ -188,6 +192,57 @@ public class BlogController extends HttpServlet {
 		}
 		
 	}
+	
+	/*
+		protected void updatePost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		
+		String titulo = request.getParameter("titulo");
+		String subtitulo = request.getParameter("subtitulo");
+		String texto = request.getParameter("texto");
+		String categoria = request.getParameter("categoria");
+		
+		if ( titulo != null   && texto != null    && categoria != null
+		 && !titulo.isEmpty() && !texto.isEmpty() && !categoria.isEmpty() ) {
+			
+			Cookie idAuthor = getCookie("id", request, response);
+			
+			if(idAuthor == null) {
+				response.sendRedirect("login.jsp");
+				return;
+			}
+			
+			System.out.println();
+			
+			Post post = new Post();
+			post.setAuthor(Integer.valueOf(idAuthor.getValue()));
+			post.setCategory(Integer.valueOf(categoria));
+			post.setTitle(titulo);
+			post.setSubtitle(subtitulo);
+			post.setText(texto);
+			
+			Date date = new Date();
+			Timestamp timestamp = new Timestamp(date.getTime());
+			post.setDate(timestamp);
+
+			PostDAO postDAO = new PostDAO();
+			String result = postDAO.insert(post);
+			postDAO.close();
+			
+			if(result.equals("Success")) {
+				response.sendRedirect("/Blog");
+			} else {
+				request.setAttribute("error", "Algo de errado não está correto =( !");
+				request.getRequestDispatcher("/newpost.jsp").forward(request, response);
+			}
+				
+		} else {
+			request.setAttribute("error", "Campo(s) obrigatório(s) em branco.");
+			request.getRequestDispatcher("/login.jsp").forward(request, response);
+		}
+		
+	}
+	*/
 	
 	protected Cookie getCookie(String name, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Cookie[] cookies = request.getCookies();
