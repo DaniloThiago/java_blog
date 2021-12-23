@@ -94,7 +94,7 @@ public class BlogController extends HttpServlet {
 		}
 		
 		if( action.equals("/editpost")) {
-			createPost(request, response);
+			editPost(request, response);
 		}
 		
 	}
