@@ -192,8 +192,7 @@ public class BlogController extends HttpServlet {
 		}
 		
 	}
-	
-	/*
+
 		protected void updatePost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		
@@ -242,7 +241,6 @@ public class BlogController extends HttpServlet {
 		}
 		
 	}
-	*/
 	
 	protected Cookie getCookie(String name, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Cookie[] cookies = request.getCookies();
