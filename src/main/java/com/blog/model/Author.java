@@ -6,7 +6,9 @@ public class Author {
 	private String email;
 	private String password;
 	
-	public Author() { }
+	public Author() {
+		
+	}
 
 	public int getId() {
 		return id;
