@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import com.blog.bd.ConnectionFactory;
+import com.blog.model.Author;
 import com.blog.model.Post;
 
 public class PostDAO {
@@ -31,6 +32,33 @@ public class PostDAO {
 			stmt.setTimestamp(6, post.getDate());
 			
 			int  i = stmt.executeUpdate();
+			stmt.close();
+            
+			if (i > 0) {
+            	return "Success";             
+            }
+                 	  
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+				
+		return "Fail";
+	}
+	
+	public String update(Post post) {
+		String sql = "UPDATE post SET author = ?, category = ?, title = ?, subtitle = ?, text = ?, date = ? WHERE id = ?";
+		
+		try {			
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, post.getAuthor());
+			stmt.setInt(2, post.getCategory());
+			stmt.setString(3, post.getTitle());
+			stmt.setString(4, post.getSubtitle());
+			stmt.setString(5, post.getText());
+			stmt.setTimestamp(6, post.getDate());
+			stmt.setInt(7, post.getId());
+			
+			int i = stmt.executeUpdate();
 			stmt.close();
             
 			if (i > 0) {
@@ -71,6 +99,37 @@ public class PostDAO {
 			stmt.close();
 			
 			return posts;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}		
+	}
+
+	//CORRIGIR (TO-DO)
+	public Post find(int id) {
+		
+		String sql = "SELECT * FROM post WHERE id=?";		
+		
+		try {
+			
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, id);			
+			
+			ResultSet rs = stmt.executeQuery();
+			Post findPost = null;
+			if( rs.next() != false) {
+				findPost = new Post();
+				findPost.setId(rs.getInt("id"));
+				findPost.setTitle(rs.getString("title"));
+				findPost.setSubtitle(rs.getString("subtitle"));
+				findPost.setText(rs.getString("text"));
+				findPost.setCategory(rs.getInt("category"));
+			}
+			rs.close();
+			stmt.close();
+			
+			return findPost;
+			     	  
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

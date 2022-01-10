@@ -7,7 +7,7 @@ public class ConnectionFactory {
 	private String drive = "com.mysql.cj.jdbc.Driver";
 	private String url = "jdbc:mysql://127.0.0.1:3306/blog";	
 	private String user = "root";
-	private String pass = "admin";
+	private String pass = "142857";
 	
 	public Connection getConnection() {
 		Connection conn = null;

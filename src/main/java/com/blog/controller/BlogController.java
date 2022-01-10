@@ -26,7 +26,7 @@ import com.blog.model.Post;
 /**
  * Servlet implementation class BlogController
  */
-@WebServlet(urlPatterns = {"/login", "/validar", "/logout", "/newpost", "/createpost"})
+@WebServlet(urlPatterns = {"/login", "/validar", "/logout", "/newpost", "/createpost", "/editpost", "/updatepost"})
 public class BlogController extends HttpServlet {
 	private static final long serialVersionUID = 1L;	
 	
@@ -78,6 +78,22 @@ public class BlogController extends HttpServlet {
 				}
 			}
 			response.sendRedirect("/Blog");
+		} else if (action.equals("/editpost")) {
+			String idpost = request.getParameter("id");
+			
+			PostDAO postDAO = new PostDAO();
+			Post findPost = postDAO.find(Integer.parseInt(idpost));
+			postDAO.close();
+			
+			CategoryDAO categoryDAO = new CategoryDAO();
+			ArrayList<Category> categories = categoryDAO.getCategories();
+			categoryDAO.close();
+
+			request.setAttribute("post", findPost);
+			request.setAttribute("categorias", categories);
+			
+			request.getRequestDispatcher("/edit-post.jsp").forward(request, response);
+			return;
 		}
 		
 	}
@@ -87,14 +103,22 @@ public class BlogController extends HttpServlet {
 				
 		if( action.equals("/validar")) {
 			validar(request, response);
+			return;
 		}
 		
 		if( action.equals("/createpost")) {
 			createPost(request, response);
+			return;
 		}
 		
 		if( action.equals("/editpost")) {
-			editPost(request, response);
+			doPost(request, response);
+			return;
+		}
+		
+		if( action.equals("/updatepost")) {
+			updatePost(request, response);
+			return;
 		}
 		
 	}
@@ -107,7 +131,7 @@ public class BlogController extends HttpServlet {
 		
 		String mail = request.getParameter("email");
 		String pass = request.getParameter("password");
-		
+
 		if ( mail != null && pass != null && !mail.isEmpty() && !pass.isEmpty() ) {
 			author.setEmail(mail);
 			author.setPassword(pass);
@@ -182,20 +206,21 @@ public class BlogController extends HttpServlet {
 			if(result.equals("Success")) {
 				response.sendRedirect("/Blog");
 			} else {
-				request.setAttribute("error", "Algo de errado n√£o est√° correto =( !");
+				request.setAttribute("error", "Algo de errado n„o est· correto =( !");
 				request.getRequestDispatcher("/newpost.jsp").forward(request, response);
 			}
 				
 		} else {
-			request.setAttribute("error", "Campo(s) obrigat√≥rio(s) em branco.");
+			request.setAttribute("error", "Campo(s) obrigatÛrio(s) em branco.");
 			request.getRequestDispatcher("/login.jsp").forward(request, response);
 		}
 		
 	}
 
-		protected void updatePost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void updatePost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		
+		int id = Integer.parseInt(request.getParameter("id"));
 		String titulo = request.getParameter("titulo");
 		String subtitulo = request.getParameter("subtitulo");
 		String texto = request.getParameter("texto");
@@ -214,6 +239,7 @@ public class BlogController extends HttpServlet {
 			System.out.println();
 			
 			Post post = new Post();
+			post.setId(id);
 			post.setAuthor(Integer.valueOf(idAuthor.getValue()));
 			post.setCategory(Integer.valueOf(categoria));
 			post.setTitle(titulo);
@@ -225,18 +251,18 @@ public class BlogController extends HttpServlet {
 			post.setDate(timestamp);
 
 			PostDAO postDAO = new PostDAO();
-			String result = postDAO.insert(post);
+			String result = postDAO.update(post);
 			postDAO.close();
 			
 			if(result.equals("Success")) {
 				response.sendRedirect("/Blog");
 			} else {
-				request.setAttribute("error", "Algo de errado n√£o est√° correto =( !");
-				request.getRequestDispatcher("/newpost.jsp").forward(request, response);
+				request.setAttribute("error", "Algo de errado n„o est· correto =( !");
+				request.getRequestDispatcher("/editpost?id="+id).forward(request, response);
 			}
 				
 		} else {
-			request.setAttribute("error", "Campo(s) obrigat√≥rio(s) em branco.");
+			request.setAttribute("error", "Campo(s) obrigatÛrio(s) em branco.");
 			request.getRequestDispatcher("/login.jsp").forward(request, response);
 		}
 		

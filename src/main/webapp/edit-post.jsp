@@ -1,5 +1,6 @@
 <%@page import="com.blog.model.Category"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="com.blog.model.Post"%>
 <%
 	Cookie[] cookies = request.getCookies();
  	String name = "";
@@ -35,6 +36,8 @@
 		</script>
 	<%
 		}
+	
+		Post post = (Post) request.getAttribute("post");
 	%>
 
 </head>
@@ -53,16 +56,17 @@
 	  <div class="row justify-content-md-center">
 	    <div class="col col-lg-4">
 	      <h1 class="py-4 text-center">Edit Post</h1>
-				<form name="formLogin" action="createpost" method="post">
+				<form name="formLogin" action="updatepost" method="post">
 				
 				  <div class="mb-3">
-					  <label for="titulo" class="form-label">TÃ­tulo</label>
-					  <input type="text" class="form-control" id="titulo" name="titulo">
+					  <label for="titulo" class="form-label">Título</label>
+					  <input type="hidden" class="form-control" id="id" name="id" value="<%=post.getId()%>">
+					  <input type="text" class="form-control" id="titulo" name="titulo" value="<%=post.getTitle()%>">
 					</div>
 					
 					<div class="mb-3">
-					  <label for="subtitulo" class="form-label">SubtÃ­tulo</label>
-					  <input type="text" class="form-control" id="subtitulo" name="subtitulo" placeholder="Opcional">
+					  <label for="subtitulo" class="form-label">Subtítulo</label>
+					  <input type="text" class="form-control" id="subtitulo" name="subtitulo" placeholder="Opcional" value="<%= post.getSubtitle()%>">
 					</div>
 				
 					<div class="mb-3">
@@ -72,14 +76,14 @@
 								ArrayList<Category> categories = (ArrayList<Category>) request.getAttribute("categorias");
 								for (Category category : categories) {
 							%>
-						  	<option value="<%=category.getId() %>"><%= category.getDescription() %></option>
+						  	<option <%= category.getId() == post.getCategory() ? "selected" : "" %> value="<%=category.getId() %>"><%= category.getDescription() %></option>
 						  <% } %>
 						</select>
 					</div>
 					
 					<div class="mb-3">
 					  <label for="texto" class="form-label">Post</label>
-					  <textarea class="form-control" id="texto" name="texto" rows="3"></textarea>
+					  <textarea class="form-control" id="texto" name="texto" rows="3"><%=post.getText()%></textarea>
 					</div>
 					
 				  <div class="d-grid gap-2 col-4 mx-auto pt-4">
