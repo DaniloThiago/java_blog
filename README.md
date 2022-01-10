@@ -26,3 +26,4 @@ Elaboraremos um sistema simples de um Blog (controle de usuário e postagens)
 ## Contribuição
 <a href="https://github.com/DaniloThiago"><img class="rounded-1 avatar-user" src="https://avatars.githubusercontent.com/u/7073492?v=4" width=50 style></a>
 <a href="https://github.com/hagliberto"><img class="rounded-1 avatar-user" src="https://avatars.githubusercontent.com/u/9095903?v=4" width=50 style></a>
+<a href="https://github.com/OcenildoJunior"><img class="rounded-1 avatar-user" src="https://avatars.githubusercontent.com/u/49927907?v=4" width=50 style></a>
