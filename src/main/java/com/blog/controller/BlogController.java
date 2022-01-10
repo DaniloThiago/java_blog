@@ -356,6 +356,12 @@ public class BlogController extends HttpServlet {
 		authorDAO.update(author);
 		authorDAO.close();
 		
+		Cookie cookieName = new Cookie("name",author.getName());
+		response.addCookie(cookieName);
+
+		Cookie cookieEmail = new Cookie("email",author.getEmail());
+		response.addCookie(cookieEmail);
+		
 		response.sendRedirect("/Blog");
 		
 	}
