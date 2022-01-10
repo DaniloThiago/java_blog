@@ -18,6 +18,8 @@
   			name = cookie.getValue();
    		} else if (cookie.getName().equals("email")) {
   			email = cookie.getValue();
+   		} else if (cookie.getName().equals("id")) {
+  			id = cookie.getValue();
    		}
   	}
  	}
@@ -78,14 +80,20 @@
 				  		<div class="col-6">	    
 								<div class="card">
 								  <div class="card-header">
-								    <h4><%= post.getTitle() %></h4>
+								    <div class="d-flex justify-content-between">
+								    	<h4><%= post.getTitle() %></h4>
+								    	<% Integer idAuthor = new Integer(post.getDadosAuthor().getId()); 
+								    	if ( id.equals( idAuthor.toString() ) ) { %>								    		
+								    		<a href="<%="editpost?id=" + post.getId()%>"><img src="assets/img/pencil.svg"></a>								    		
+								    	<% } %>
+								    </div>
 								  </div>
 								  <div class="card-body">
 								  	
 								    <h5 class="card-title"><%= post.getSubtitle().isBlank() ? '-' : post.getSubtitle() %></h5>
 								    
 								    <div class="text-truncate card-text">
-								    This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.
+								    	<%=post.getText()%>
 								    </div>
 								    <p class="card-text"><small class="text-muted"><%= post.getDate() %></small></p>
 								  </div>

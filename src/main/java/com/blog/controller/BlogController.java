@@ -26,7 +26,9 @@ import com.blog.model.Post;
 /**
  * Servlet implementation class BlogController
  */
-@WebServlet(urlPatterns = {"/login", "/validar", "/logout", "/newpost", "/createpost", "/cadastrar", "/signup", "/edita-autor", "/updateAuthor"})
+
+@WebServlet(urlPatterns = {"/login", "/validar", "/logout", "/newpost", "/createpost", "/cadastrar", "/signup", "/edita-autor", "/updateAuthor", "/editpost", "/updatepost"})
+
 public class BlogController extends HttpServlet {
 	private static final long serialVersionUID = 1L;	
 	
@@ -90,6 +92,22 @@ public class BlogController extends HttpServlet {
 				}
 			}
 			response.sendRedirect("/Blog");
+
+		} else if (action.equals("/editpost")) {
+			String idpost = request.getParameter("id");
+			
+			PostDAO postDAO = new PostDAO();
+			Post findPost = postDAO.find(Integer.parseInt(idpost));
+			postDAO.close();
+			
+			CategoryDAO categoryDAO = new CategoryDAO();
+			ArrayList<Category> categories = categoryDAO.getCategories();
+			categoryDAO.close();
+
+			request.setAttribute("post", findPost);
+			request.setAttribute("categorias", categories);
+			
+			request.getRequestDispatcher("/edit-post.jsp").forward(request, response);
 		} 
 		
 		else if( action.equals("/cadastrar")) {
@@ -103,10 +121,22 @@ public class BlogController extends HttpServlet {
 				
 		if( action.equals("/validar")) {
 			validar(request, response);
+			return;
 		}
 		
 		if( action.equals("/createpost")) {
 			createPost(request, response);
+			return;
+		}
+		
+		if( action.equals("/editpost")) {
+			doPost(request, response);
+			return;
+		}
+		
+		if( action.equals("/updatepost")) {
+			updatePost(request, response);
+			return;
 		}
 		
 	}
@@ -119,7 +149,7 @@ public class BlogController extends HttpServlet {
 		
 		String mail = request.getParameter("email");
 		String pass = request.getParameter("password");
-		
+
 		if ( mail != null && pass != null && !mail.isEmpty() && !pass.isEmpty() ) {
 			author.setEmail(mail);
 			author.setPassword(pass);
@@ -194,8 +224,59 @@ public class BlogController extends HttpServlet {
 			if(result.equals("Success")) {
 				response.sendRedirect("/Blog");
 			} else {
-				request.setAttribute("error", "Algoi de errado não está correto =( !");
+				request.setAttribute("error", "Algo de errado não está correto =( !");
 				request.getRequestDispatcher("/newpost.jsp").forward(request, response);
+			}
+				
+		} else {
+			request.setAttribute("error", "Campo(s) obrigatório(s) em branco.");
+			request.getRequestDispatcher("/login.jsp").forward(request, response);
+		}
+		
+	}
+
+	protected void updatePost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		
+		int id = Integer.parseInt(request.getParameter("id"));
+		String titulo = request.getParameter("titulo");
+		String subtitulo = request.getParameter("subtitulo");
+		String texto = request.getParameter("texto");
+		String categoria = request.getParameter("categoria");
+		
+		if ( titulo != null   && texto != null    && categoria != null
+		 && !titulo.isEmpty() && !texto.isEmpty() && !categoria.isEmpty() ) {
+			
+			Cookie idAuthor = getCookie("id", request, response);
+			
+			if(idAuthor == null) {
+				response.sendRedirect("login.jsp");
+				return;
+			}
+			
+			System.out.println();
+			
+			Post post = new Post();
+			post.setId(id);
+			post.setAuthor(Integer.valueOf(idAuthor.getValue()));
+			post.setCategory(Integer.valueOf(categoria));
+			post.setTitle(titulo);
+			post.setSubtitle(subtitulo);
+			post.setText(texto);
+			
+			Date date = new Date();
+			Timestamp timestamp = new Timestamp(date.getTime());
+			post.setDate(timestamp);
+
+			PostDAO postDAO = new PostDAO();
+			String result = postDAO.update(post);
+			postDAO.close();
+			
+			if(result.equals("Success")) {
+				response.sendRedirect("/Blog");
+			} else {
+				request.setAttribute("error", "Algo de errado não está correto =( !");
+				request.getRequestDispatcher("/editpost?id="+id).forward(request, response);
 			}
 				
 		} else {
@@ -274,6 +355,12 @@ public class BlogController extends HttpServlet {
 		AuthorDAO authorDAO = new AuthorDAO();
 		authorDAO.update(author);
 		authorDAO.close();
+		
+		Cookie cookieName = new Cookie("name",author.getName());
+		response.addCookie(cookieName);
+
+		Cookie cookieEmail = new Cookie("email",author.getEmail());
+		response.addCookie(cookieEmail);
 		
 		response.sendRedirect("/Blog");
 		

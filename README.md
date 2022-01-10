@@ -20,6 +20,7 @@ Elaboraremos um sistema simples de um Blog (controle de usuário e postagens)
 - [x] Login/Logout
 - [ ] Form para cadastro de author
 - [x] Form para cadastro de post - andamento
+- [x] Form para edição de post - andamento
 - [ ] TODO
 
 ## Contribuição
