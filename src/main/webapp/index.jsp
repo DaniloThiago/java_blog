@@ -11,6 +11,9 @@
  	if (cookies != null) {
   	for (int i = 0; i < cookies.length; i++) {
    		Cookie cookie = cookies[i];
+   		if (cookie.getName().equals("id")){
+   			id = cookie.getValue();
+   		}
    		if (cookie.getName().equals("name")) {
   			name = cookie.getValue();
    		} else if (cookie.getName().equals("email")) {
@@ -42,12 +45,14 @@
 			    <a class="navbar-brand">Blog Java</a>
 			    <div class="d-flex">
 		    		<% if(name.isEmpty()) { %>
-			      	<a href="login"><button class="btn btn-outline-success">Login</button></a>
+			      	<a href="login"><button class="btn btn-outline-success me-3">Login</button></a>
+			      	<a href="signup"><button class="btn btn-outline-warning">Sign up</button></a>
 			      <% } else { %>
 			       	<span class="navbar-text me-4">
 					      Olá <%= name %>
 					    </span>
 			      	<a href="newpost"><button class="btn btn-outline-success me-3">Criar Post</button></a>
+			      	<a href="edita-autor?id=<%= id  %>"><button class="btn btn-outline-warning me-3">Editar Conta</button></a>
 			      	<a href="logout"><button class="btn btn-outline-danger">Logout</button></a>
 			      <% }  %>
 			    </div>

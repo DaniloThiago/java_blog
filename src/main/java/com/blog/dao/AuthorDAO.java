@@ -85,6 +85,7 @@ public class AuthorDAO {
 				findAuthor.setId(rs.getInt("id"));
 				findAuthor.setName(rs.getString("name"));
 				findAuthor.setEmail(rs.getString("email"));
+				findAuthor.setPassword(rs.getString("password"));
 			}
 			rs.close();
 			stmt.close();
@@ -97,27 +98,22 @@ public class AuthorDAO {
 		}
 	}
 	
-	public String update(Author author) {
-		String sql = "UPDATE author SET name=?, email=?, password=password WHERE id=?";
+	public void update(Author author) {
+		String sql = "UPDATE author SET name=?, email=?, password=? WHERE id=?";
 		
 		try {
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1, author.getName());
-			stmt.setString(2, author.getEmail());			
-			stmt.setInt(3, author.getId());
+			stmt.setString(2, author.getEmail());
+			stmt.setString(3, author.getPassword());	
+			stmt.setInt(4, author.getId());
 			
-			System.out.println(author.getPassword());
-			int  i = stmt.executeUpdate();
+			stmt.execute();
 			stmt.close();
-            
-			if (i > 0) {
-            	return "Success";             
-            }
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-				
-		return "Fail";
 	}
 	
 	public String delete(Author author) {

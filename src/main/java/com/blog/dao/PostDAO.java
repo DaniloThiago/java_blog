@@ -105,7 +105,6 @@ public class PostDAO {
 		}		
 	}
 
-	//CORRIGIR (TO-DO)
 	public Post find(int id) {
 		
 		String sql = "SELECT * FROM post WHERE id=?";		

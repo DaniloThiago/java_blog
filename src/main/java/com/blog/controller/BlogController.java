@@ -26,7 +26,9 @@ import com.blog.model.Post;
 /**
  * Servlet implementation class BlogController
  */
-@WebServlet(urlPatterns = {"/login", "/validar", "/logout", "/newpost", "/createpost", "/editpost", "/updatepost"})
+
+@WebServlet(urlPatterns = {"/login", "/validar", "/logout", "/newpost", "/createpost", "/cadastrar", "/signup", "/edita-autor", "/updateAuthor", "/editpost", "/updatepost"})
+
 public class BlogController extends HttpServlet {
 	private static final long serialVersionUID = 1L;	
 	
@@ -46,6 +48,18 @@ public class BlogController extends HttpServlet {
 		
 		if( action.equals("/login") ) {			
 			response.sendRedirect("login.jsp");
+		}
+		
+		else if(action.equals("/signup")) {
+			response.sendRedirect("signup.jsp");
+		}
+		
+		else if(action.equals("/updateAuthor")) {
+			updateAuthor(request, response);
+		}
+		
+		else if(action.equals("/edita-autor")) {
+			selecionaAutor(request, response);
 		}
 		
 		else if( action.equals("/newpost") ) {
@@ -78,6 +92,7 @@ public class BlogController extends HttpServlet {
 				}
 			}
 			response.sendRedirect("/Blog");
+
 		} else if (action.equals("/editpost")) {
 			String idpost = request.getParameter("id");
 			
@@ -93,7 +108,10 @@ public class BlogController extends HttpServlet {
 			request.setAttribute("categorias", categories);
 			
 			request.getRequestDispatcher("/edit-post.jsp").forward(request, response);
-			return;
+		} 
+		
+		else if( action.equals("/cadastrar")) {
+			newAuthor(request, response);
 		}
 		
 	}
@@ -280,6 +298,68 @@ public class BlogController extends HttpServlet {
 		}
 		return null;
 	}
+	
+	protected void newAuthor(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Author author = new Author();
+		String nome = request.getParameter("name").replaceAll(" ", "");
+		
+		author.setName(nome);
+		author.setEmail(request.getParameter("email"));
+		author.setPassword(request.getParameter("password"));
+		
+		AuthorDAO authorDAO = new AuthorDAO();
+		
+		authorDAO.insert(author);
+		
+		authorDAO.close();
+		
+		System.out.println("Autor adicionado com sucesso!");
+		
+		response.sendRedirect("/Blog");
+	}
+	
+	protected void selecionaAutor(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int id = Integer.parseInt(request.getParameter("id"));
+		
+		Author author = new Author();
+		
+		AuthorDAO authorDAO = new AuthorDAO();
+		
+		author = authorDAO.findId(id);
+		
+		authorDAO.close();
+		
+		System.out.println(author.getName());
+		
+		request.setAttribute("author", author);
+		
+		RequestDispatcher rd = request.getRequestDispatcher("editAuthor.jsp");
+		
+		rd.forward(request, response);
+		
+	}
+	
+	protected void updateAuthor(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Author author = new Author();
+		
+		int id = Integer.parseInt(request.getParameter("id"));
+		
+		String nome = request.getParameter("name").replaceAll(" ", "");
+		
+		author.setName(nome);
+		
+		author.setId(id);
+		author.setEmail(request.getParameter("email"));
+		author.setPassword(request.getParameter("password"));
+		
+		AuthorDAO authorDAO = new AuthorDAO();
+		authorDAO.update(author);
+		authorDAO.close();
+		
+		response.sendRedirect("/Blog");
+		
+	}
+	
 	
 
 }

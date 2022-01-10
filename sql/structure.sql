@@ -27,4 +27,3 @@ CREATE TABLE IF NOT EXISTS post (
     FOREIGN KEY(author) REFERENCES author(id),
     FOREIGN KEY(category) REFERENCES category(id)
 );
- 
